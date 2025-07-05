@@ -19,7 +19,7 @@ function App() {
             <p className="subtitle">
               NeuroTab helps you capture thoughts as connected tabs, and uses AI to organize, expand, and evolve your ideas.
             </p>
-            <button className="cta-button">Start Thinking</button>
+            <button className="cta-button" onClick={() => alert('Work in Progress')}>Start Thinking</button>
           </div>
           <div className="hero-image">
             <HeroIllustration />
