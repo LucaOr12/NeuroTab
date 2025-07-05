@@ -47,10 +47,11 @@ neurotab-client/<br>
 
 ## 🧠 What is NeuroTab?
 
-NeuroTab was built as a portfolio project to demonstrate:
-• Full stack architecture
-• Modern UI/UX design
-• Practical AI integration
-• Scalable code structure
+NeuroTab was built as a portfolio project to demonstrate:<br>
+
+- Full stack architecture
+- Modern UI/UX design
+- Practical AI integration
+- Scalable code structure
 
 “A second brain for structured thinkers.”
