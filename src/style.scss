@@ -1,0 +1,30 @@
+/* src/style.css */
+
+:root {
+  --font-family: "Inter", sans-serif;
+
+  --color-bg: #131b23;
+  --color-text: #f3f4f6;
+  --color-muted: #9ca3af;
+
+  --color-primary: #9f7aea;
+  --color-accent: #3f51b5;
+  --color-third: #151719;
+
+  --color-button-bg: #ffffff;
+  --color-button-text: #3f51b5;
+
+  /* Glass effect */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+  font-size: 16px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--color-bg);
+}
