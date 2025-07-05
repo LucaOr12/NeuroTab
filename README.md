@@ -20,27 +20,37 @@ This is the **frontend** of NeuroTab, built with React.
 
 ## 🛠️ Tech Stack
 
-- **React** (Vite)
-- **TypeScript**
-- **TailwindCSS**
+- **React**
+- **JavaScript**
+- **SCSS**
 - **Axios** for API communication
 - **React DnD** or **React Flow** (for drag & connection UI)
-- **OpenAI API** (via backend)
-- **JWT / Google OAuth2** (auth handled by backend)
-- **Deployed on**: _e.g., Vercel / Netlify_
+- **OpenRouter API** (via backend)
+- **Google OAuth2** (auth handled by backend)
+- **Deployed on**: Vercel
 
 ---
 
 ## 📦 Project Structure
 
-neurotab-client/
-├── src/
-│ ├── components/ # Reusable UI elements
-│ ├── pages/ # App pages (e.g. Dashboard, Login)
-│ ├── services/ # API calls
-│ ├── context/ # Global state (user, tabs)
-│ ├── hooks/ # Custom React hooks
-│ ├── assets/ # Icons, logos, images
-│ └── App.tsx # Main app
-├── public/
-└── index.html
+neurotab-client/<br>
+├── src/<br>
+│ ├── components/ # Reusable UI elements<br>
+│ ├── pages/ # App pages (e.g. Dashboard, Login)<br>
+│ ├── services/ # API calls<br>
+│ ├── context/ # Global state (user, tabs)<br>
+│ ├── hooks/ # Custom React hooks<br>
+│ ├── assets/ # Icons, logos, images<br>
+│ └── App.tsx # Main app<br>
+├── public/<br>
+└── index.html<br>
+
+## 🧠 What is NeuroTab?
+
+NeuroTab was built as a portfolio project to demonstrate:
+• Full stack architecture
+• Modern UI/UX design
+• Practical AI integration
+• Scalable code structure
+
+“A second brain for structured thinkers.”
