@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import Stepper, { Step } from "../components/Stepper";
 import "./Profile.scss";
 import { GoogleLogin } from "@react-oauth/google";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFireFlameCurved } from "@fortawesome/free-solid-svg-icons";
+import { faThumbtack } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 export default function Profile() {
@@ -50,6 +53,8 @@ export default function Profile() {
     setShowStepper(true);
   };
   const TabsCount = user?.tabs?.length || 0;
+  const streak = user?.loginRecord || 0;
+  const topTopics = user?.tabs?.tags || [];
 
   return (
     <div className="page-content">
@@ -86,6 +91,31 @@ export default function Profile() {
           />
           <h2>{user?.name || "user"}</h2>
           <p>Email: {user?.email}</p>
+          <div
+            style={{
+              borderTop: "2px solid var(--color-muted)",
+              marginLeft: 20,
+              marginRight: 20,
+            }}
+          ></div>
+          <div className="profile-stats">
+            <p>
+              <FontAwesomeIcon
+                icon={faFireFlameCurved}
+                style={{ marginRight: 5 }}
+              />
+              Consecutive Days of Use: <strong>{streak}</strong>
+            </p>
+            <p>
+              <FontAwesomeIcon icon={faThumbtack} style={{ marginRight: 5 }} />
+              Most Used Topics:
+            </p>
+            <ul>
+              {topTopics.map((topic, index) => (
+                <li key={index}>#{topic}</li>
+              ))}
+            </ul>
+          </div>
           <div
             style={{
               borderTop: "2px solid var(--color-muted)",
