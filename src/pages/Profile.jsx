@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Stepper, { Step } from "../components/Stepper";
 import "./Profile.scss";
 import { GoogleLogin } from "@react-oauth/google";
+import { Link } from "react-router-dom";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
@@ -40,6 +41,16 @@ export default function Profile() {
       .catch(() => alert("Error fetching user profile"));
   };
 
+  const handleLogout = async () => {
+    await fetch("http://localhost:5281/api/Users/logout", {
+      method: "POST",
+      credentials: "include", // Important: send cookies
+    });
+    setUser(null);
+    setShowStepper(true);
+  };
+  const TabsCount = user?.tabs?.length || 0;
+
   return (
     <div className="page-content">
       {showStepper ? (
@@ -75,6 +86,21 @@ export default function Profile() {
           />
           <h2>{user?.name || "user"}</h2>
           <p>Email: {user?.email}</p>
+          <div
+            style={{
+              borderTop: "2px solid var(--color-muted)",
+              marginLeft: 20,
+              marginRight: 20,
+            }}
+          ></div>
+          <Link to="/tabs" className="profile-tabs-link">
+            <h2 className="profile-tabs-title">
+              My Tabs <span className="tabs-count-circle">{TabsCount}</span>
+            </h2>
+          </Link>
+          <button className="LogoutButton" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       )}
     </div>
