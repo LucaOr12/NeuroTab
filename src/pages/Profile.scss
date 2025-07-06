@@ -46,3 +46,37 @@
     }
   }
 }
+
+.profile-content {
+  padding: 2rem;
+  max-width: 500px;
+  margin: 2rem auto;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  color: var(--color-text);
+  text-align: center;
+
+  img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border: 3px solid var(--color-accent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--color-muted);
+  }
+}

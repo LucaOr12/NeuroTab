@@ -8,23 +8,33 @@ export default function Profile() {
   const [showStepper, setShowStepper] = useState(true);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-      setShowStepper(false);
-    }
+    fetch("http://localhost:5281/api/Users/logged-user", {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data) {
+          setUser(data);
+          setShowStepper(false);
+        }
+      });
   }, []);
 
   const handleLoginSuccess = (credentialResponse) => {
-    fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+    fetch("http://localhost:5281/api/Users/google-login", {
+      method: "POST",
+      credentials: "include",
       headers: {
-        Authorization: `Bearer ${credentialResponse.credential}`,
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        idToken: credentialResponse.credential,
+      }),
     })
       .then((res) => res.json())
       .then((profile) => {
         setUser(profile);
-        localStorage.setItem("user", JSON.stringify(profile));
         setShowStepper(false);
       })
       .catch(() => alert("Error fetching user profile"));
@@ -54,30 +64,17 @@ export default function Profile() {
           <Step>
             <h2>Done!</h2>
             <p>Welcome, {user?.name || "user"}!</p>
-            <button
-              onClick={() => {
-                setUser(null);
-                localStorage.removeItem("user");
-                setShowStepper(true);
-              }}
-            >
-              Logout
-            </button>
           </Step>
         </Stepper>
       ) : (
-        <div>
-          <h2>Welcome, {user?.name || "user"}!</h2>
+        <div className="profile-content">
+          <img
+            src={user?.profilePictureUrl}
+            alt={user?.name}
+            referrerPolicy="no-referrer"
+          />
+          <h2>{user?.name || "user"}</h2>
           <p>Email: {user?.email}</p>
-          <button
-            onClick={() => {
-              setUser(null);
-              localStorage.removeItem("user");
-              setShowStepper(true);
-            }}
-          >
-            Logout
-          </button>
         </div>
       )}
     </div>
