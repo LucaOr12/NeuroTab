@@ -6,9 +6,6 @@ export default function NavBar() {
   return (
     <nav className="navbar" aria-label="Main navigation">
       <div className="navbar-content">
-        <div className="navbar-logo">
-          <img src="/mind-map.png" alt="NeuroTab logo" />
-        </div>
         <ul className="navbar-links">
           <li>
             <Link to="/">

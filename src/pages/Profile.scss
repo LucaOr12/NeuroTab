@@ -1,0 +1,48 @@
+@import "../style.scss";
+
+.page-content {
+  max-width: 480px;
+  margin: 3rem auto;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2rem;
+  color: #ddd;
+  font-family: var(--font-family);
+  text-align: center;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    color: var(--color-muted);
+  }
+
+  button {
+    background: rgba(255, 255, 255, 0.025);
+    border: none;
+    border-radius: 30px;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    color: var(--color-text);
+    cursor: pointer;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3),
+      inset 0 0 0.5px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: var(--color-gradient);
+      box-shadow: 0 0 20px #9f7aea;
+      transform: translateY(-2px);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 25px #9f7aea;
+    }
+  }
+}

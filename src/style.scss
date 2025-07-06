@@ -5,11 +5,17 @@
 
   --color-bg: #131b23;
   --color-text: #f3f4f6;
-  --color-muted: #9ca3af;
+  --color-muted: #bbb;
 
-  --color-primary: #5227ff;
-  --color-accent: #3f51b5;
-  --color-third: #151719;
+  --color-primary: #5c48d3;
+  --color-accent: #9f7aea;
+
+  /* Gradient colors */
+  --color-gradient: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-accent)
+  );
 
   /* Glass effect */
   --glass-bg: rgba(255, 255, 255, 0.05);
@@ -25,6 +31,6 @@ body {
   overflow-x: hidden;
   background-color: var(--color-bg);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }

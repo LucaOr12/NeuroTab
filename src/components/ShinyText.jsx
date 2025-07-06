@@ -1,16 +1,25 @@
 import "./ShinyText.scss";
 
-const ShinyText = ({ text, disabled = false, speed = 5, className = "" }) => {
-  const animationDuration = `${speed}s`;
+export default function ShinyText({
+  children,
+  className = "",
+  colors = ["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"],
+  animationSpeed = 8,
+  showBorder = false,
+}) {
+  const gradientStyle = {
+    backgroundImage: `linear-gradient(to right, ${colors.join(", ")})`,
+    animationDuration: `${animationSpeed}s`,
+  };
 
   return (
-    <div
-      className={`shiny-text ${disabled ? "disabled" : ""} ${className}`}
-      style={{ animationDuration }}
-    >
-      {text}
+    <div className={`animated-gradient-text ${className}`}>
+      {showBorder && (
+        <div className="gradient-overlay" style={gradientStyle}></div>
+      )}
+      <div className="text-content" style={gradientStyle}>
+        {children}
+      </div>
     </div>
   );
-};
-
-export default ShinyText;
+}

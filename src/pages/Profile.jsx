@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Stepper, { Step } from "../components/Stepper";
+import "./Profile.scss";
 import { GoogleLogin } from "@react-oauth/google";
 
 export default function Profile() {
