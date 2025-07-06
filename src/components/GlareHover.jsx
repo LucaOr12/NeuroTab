@@ -1,10 +1,10 @@
 import "./GlareHover.scss";
 
 const GlareHover = ({
-  width = "180px",
-  height = "50px",
+  width = "120px",
+  height = "30px",
   background = "rgba(255, 255, 255, 0.025)",
-  borderRadius = "8px",
+  borderRadius = "48px",
   borderColor = "rgba(159, 122, 234, 0.15)",
   children,
   glareColor = "#ffffff",

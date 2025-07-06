@@ -1,17 +1,17 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.scss';
 import AuroraBackground from './components/AuroraBackground';
 import ShinyText from './components/ShinyText';
-import GlareHover from './components/GlareHover';
 import NavBar from './components/NavBar';
 
-// Placeholder routes
-const Tabs = () => <div className="page-content">Tabs page coming soon...</div>;
-const Profile = () => <div className="page-content">User Profile here</div>;
+import Profile from './pages/Profile';
+import Tabs from './pages/Tabs';
 
 function Home() {
+  const navigate = useNavigate();
+
   return (
-    <section className="hero">
+    <section className="hero" id="home">
       <div className="hero-text">
         <div className="hero-badge">🚀 Beta</div>
         <ShinyText text="NeuroTab" disabled={false} speed={3} className="title" />
@@ -19,36 +19,21 @@ function Home() {
           NeuroTab helps you capture thoughts as connected tabs, and uses AI to organize, expand, and evolve your ideas.
         </p>
         <div style={{ height: '100px', position: 'relative' }}>
-          <GlareHover
-            glareColor="#ffffff"
-            glareOpacity={0.3}
-            glareAngle={-30}
-            glareSize={300}
-            transitionDuration={800}
-            playOnce={false}
+          <button className="redirect-button"
+            onClick={() => navigate('/profile')}
           >
-            <p
-              style={{
-                fontSize: '1.2rem',
-                fontWeight: '600',
-                color: 'var(--color-text)',
-                margin: 0,
-                cursor: 'pointer',
-              }}
-              onClick={() => alert('Work in Progress!')}
-            >
-              Start Thinking
-            </p>
-          </GlareHover>
+            Start Thinking
+          </button>
         </div>
       </div>
-    </section>
+    </section >
   );
 }
 
-function App() {
+
+export default function App() {
   return (
-    <Router>
+    <>
       <NavBar />
       <AuroraBackground
         colorStops={["#9F7AEA", "#2778DB", "#5C728D"]}
@@ -63,8 +48,6 @@ function App() {
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
-    </Router>
+    </>
   );
 }
-
-export default App;
