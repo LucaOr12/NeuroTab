@@ -12,7 +12,7 @@ export default function Profile() {
   const [showStepper, setShowStepper] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5281/api/Users/logged-user", {
+    fetch("https://neurotab-api.onrender.com/api/Users/logged-user", {
       method: "GET",
       credentials: "include",
     })
@@ -26,7 +26,7 @@ export default function Profile() {
   }, []);
 
   const handleLoginSuccess = (credentialResponse) => {
-    fetch("http://localhost:5281/api/Users/google-login", {
+    fetch("https://neurotab-api.onrender.com/api/Users/google-login", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -45,7 +45,7 @@ export default function Profile() {
   };
 
   const handleLogout = async () => {
-    await fetch("http://localhost:5281/api/Users/logout", {
+    await fetch("https://neurotab-api.onrender.com/api/Users/logout", {
       method: "POST",
       credentials: "include", // Important: send cookies
     });
