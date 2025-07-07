@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [showStepper, setShowStepper] = useState(true);
+  const [tabsCount, setTabsCount] = useState(0);
 
   useEffect(() => {
     fetch("https://neurotab-api.onrender.com/api/Users/logged-user", {
@@ -52,7 +53,14 @@ export default function Profile() {
     setUser(null);
     setShowStepper(true);
   };
-  const TabsCount = user?.tabs?.length || 0;
+  useEffect(() => {
+    fetch("https://neurotab-api.onrender.com/api/Tabs/all", {
+      credentials: "include",
+    })
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => setTabsCount(data.length))
+      .catch(() => setTabsCount(0));
+  }, []);
   const streak = user?.loginRecord || 0;
   const topTopics = user?.tabs?.tags || [];
 
@@ -125,7 +133,7 @@ export default function Profile() {
           ></div>
           <Link to="/tabs" className="profile-tabs-link">
             <h2 className="profile-tabs-title">
-              My Tabs <span className="tabs-count-circle">{TabsCount}</span>
+              My Tabs <span className="tabs-count-circle">{tabsCount}</span>
             </h2>
           </Link>
           <button className="LogoutButton" onClick={handleLogout}>

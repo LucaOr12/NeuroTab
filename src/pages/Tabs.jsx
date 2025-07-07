@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import AnimatedList from "../components/AnimatedList";
 import "./Tabs.scss";
 
 export default function Tabs() {
@@ -47,6 +48,10 @@ export default function Tabs() {
     }
   };
 
+  const selectedIndex = filteredTabs.findIndex(
+    (tab) => tab.id === selectedTab?.id
+  );
+
   return (
     <div className="tabs-page">
       <aside className="tab-nav">
@@ -57,26 +62,27 @@ export default function Tabs() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+        <button onClick={handleCreateTab} className="create-tab-button">
+          +
+        </button>
 
         {filteredTabs.length === 0 ? (
           <div className="no-tabs">
             <p>No tabs found.</p>
-            <button onClick={handleCreateTab} className="create-tab-button">
-              + Create Tab
-            </button>
           </div>
         ) : (
-          filteredTabs.map((tab) => (
-            <div
-              key={tab.id}
-              className={`tab-item ${
-                selectedTab?.id === tab.id ? "active" : ""
-              }`}
-              onClick={() => setSelectedTab(tab)}
-            >
-              {tab.title}
-            </div>
-          ))
+          <AnimatedList
+            items={filteredTabs.map((tab) => tab.title)}
+            onItemSelect={(title, index) => {
+              setSelectedTab(filteredTabs[index]);
+            }}
+            showGradients={false}
+            enableArrowNavigation={true}
+            displayScrollbar={false}
+            selectedIndex={filteredTabs.findIndex(
+              (tab) => tab.id === selectedTab?.id
+            )}
+          />
         )}
       </aside>
 
