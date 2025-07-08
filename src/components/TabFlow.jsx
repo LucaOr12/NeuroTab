@@ -5,30 +5,24 @@ import {
   Background,
   applyNodeChanges,
 } from "@xyflow/react";
+import CustomNode from "./CustomNode";
 import "@xyflow/react/dist/style.css";
-import "./TabFlow.scss";
 
 export default function TabFlow({ contents }) {
   const [nodes, setNodes] = useState([]);
 
+  const nodeTypes = {
+    custom: CustomNode,
+  };
+
   useEffect(() => {
     const generatedNodes = contents.map((item, index) => ({
       id: item.id,
-      position: { x: 100 + index * 150, y: 100 },
+      position: { x: 100 + index * 200, y: 100 },
       data: {
-        label: (
-          <div>
-            <strong>{item.title}</strong>
-            <p>{item.description}</p>
-            {item.url && (
-              <a href={item.url} target="_blank" rel="noopener noreferrer">
-                {item.url}
-              </a>
-            )}
-          </div>
-        ),
+        ...item,
       },
-      type: "default",
+      type: "custom",
     }));
     setNodes(generatedNodes);
   }, [contents]);
@@ -53,6 +47,7 @@ export default function TabFlow({ contents }) {
           edges={[]}
           onNodesChange={onNodesChange}
           fitView
+          nodeTypes={nodeTypes}
         >
           <Background />
         </ReactFlow>

@@ -1,11 +1,11 @@
-@import "../style.scss";
-
 .react-flow__node {
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3),
     inset 0 0 0.5px rgba(255, 255, 255, 0.1);
   background: var(--color-gradient);
+  min-height: 300px;
+  max-width: 300px;
   padding: 1rem;
   gap: 1rem;
 }
