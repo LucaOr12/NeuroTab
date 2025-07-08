@@ -6,14 +6,26 @@ import {
   applyNodeChanges,
 } from "@xyflow/react";
 import CustomNode from "./CustomNode";
+import SimpleFloatingEdge from "./SimpleFloatingEdge";
 import "@xyflow/react/dist/style.css";
 
 export default function TabFlow({ contents }) {
   const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
 
   const nodeTypes = {
     custom: CustomNode,
   };
+  const edgeTypes = {
+    floating: SimpleFloatingEdge,
+  };
+
+  const onConnect = useCallback(
+    (params) => {
+      setEdges((eds) => [...eds, { ...params, type: "floating" }]);
+    },
+    [setEdges]
+  );
 
   useEffect(() => {
     const generatedNodes = contents.map((item, index) => ({
@@ -44,10 +56,12 @@ export default function TabFlow({ contents }) {
       <ReactFlowProvider>
         <ReactFlow
           nodes={nodes}
-          edges={[]}
+          edges={edges}
           onNodesChange={onNodesChange}
           fitView
+          onConnect={onConnect}
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
         >
           <Background />
         </ReactFlow>
