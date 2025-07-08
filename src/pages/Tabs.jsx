@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import AnimatedList from "../components/AnimatedList";
+import TabFlow from "../components/TabFlow";
 import "./Tabs.scss";
 
 export default function Tabs() {
@@ -134,35 +135,7 @@ export default function Tabs() {
                 Create Thought +
               </button>
             </div>
-            <ul className="tab-items">
-              {selectedTab.content?.map((item) => (
-                <li key={item.id}>
-                  <strong>{item.title}</strong>
-                  <p>{item.description}</p>
-                  {item.url && (
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {item.url}
-                    </a>
-                  )}
-                </li>
-              ))}
-              {selectedTab.content?.length === 0 && (
-                <li
-                  className="no-content"
-                  style={{
-                    background: "none",
-                    border: "none",
-                    boxShadow: "none",
-                  }}
-                >
-                  No content created yet.
-                </li>
-              )}
-            </ul>
+            <TabFlow contents={selectedTab.content || []} />
           </>
         ) : (
           <div className="no-tab-selected">
