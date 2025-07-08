@@ -52,6 +52,41 @@ export default function Tabs() {
     (tab) => tab.id === selectedTab?.id
   );
 
+  const handleCreateContent = async (tabId) => {
+    console.log("Creating content for tabId:", tabId);
+    const response = await fetch(
+      `https://neurotab-api.onrender.com/api/Contents`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tabId: tabId,
+          title: "New Content Item",
+          description: "",
+          url: null,
+        }),
+      }
+    );
+    if (response.ok) {
+      const newContent = await response.json();
+      console.log("Created Content:", newContent);
+      // Update the selected tab with the new content
+      setSelectedTab((prevTab) => {
+        if (!prevTab) return null;
+        return {
+          ...prevTab,
+          content: [...(prevTab.content || []), newContent],
+        };
+      });
+    } else {
+      const error = await response.json();
+      console.error("Error creating content:", error);
+    }
+  };
+
   return (
     <div className="tabs-page">
       <aside className="tab-nav">
@@ -89,12 +124,44 @@ export default function Tabs() {
       <main className="tab-content">
         {selectedTab ? (
           <>
-            <h2>{selectedTab.title}</h2>
-            <p>{selectedTab.description}</p>
-            <ul>
-              {selectedTab.content?.map((item, idx) => (
-                <li key={idx}>{item.text}</li>
+            <div className="tab-actions">
+              <h2>{selectedTab.title}</h2>
+              <p>{selectedTab.description}</p>
+              <button
+                className="create-content-button"
+                onClick={() => handleCreateContent(selectedTab.id)}
+              >
+                Create Thought +
+              </button>
+            </div>
+            <ul className="tab-items">
+              {selectedTab.content?.map((item) => (
+                <li key={item.id}>
+                  <strong>{item.title}</strong>
+                  <p>{item.description}</p>
+                  {item.url && (
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {item.url}
+                    </a>
+                  )}
+                </li>
               ))}
+              {selectedTab.content?.length === 0 && (
+                <li
+                  className="no-content"
+                  style={{
+                    background: "none",
+                    border: "none",
+                    boxShadow: "none",
+                  }}
+                >
+                  No content created yet.
+                </li>
+              )}
             </ul>
           </>
         ) : (

@@ -7,10 +7,13 @@
 }
 
 .scroll-list {
-  max-height: 1100px;
+  max-height: 1050px;
   overflow-y: auto;
   border-radius: 8px;
-  background-color: var(--glass-bg);
+  padding: 0.5rem;
+  background-color: none;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), inset 0 0 0.5px rgba;
+  border: 1px solid var(--glass-border);
 }
 
 .scroll-list::-webkit-scrollbar {
@@ -46,11 +49,35 @@
 }
 
 .item.selected {
-  background-color: var(--color-primary);
+  background: var(--color-gradient);
   box-shadow: 0 4px 24px var(--color-accent);
 }
 
 .item-text {
   color: var(--color-text);
   margin: 0;
+}
+
+.top-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  border-radius: 8px;
+  background: linear-gradient(to bottom, #060010, transparent);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.bottom-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  border-radius: 8px;
+  background: linear-gradient(to top, #060010, transparent);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
