@@ -18,3 +18,11 @@
 .react-flow__node a {
   text-decoration: none;
 }
+
+.react-flow__handle {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+.react-flow__node:hover .react-flow__handle {
+  opacity: 1;
+}
