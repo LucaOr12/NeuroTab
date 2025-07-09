@@ -11,6 +11,7 @@ export default function Profile() {
   const [user, setUser] = useState(null);
   const [showStepper, setShowStepper] = useState(true);
   const [tabsCount, setTabsCount] = useState(0);
+  const [topTab, setTopTab] = useState(null);
 
   useEffect(() => {
     fetch("https://neurotab-api.onrender.com/api/Users/logged-user", {
@@ -58,11 +59,26 @@ export default function Profile() {
       credentials: "include",
     })
       .then((res) => (res.ok ? res.json() : []))
-      .then((data) => setTabsCount(data.length))
-      .catch(() => setTabsCount(0));
+      .then((data) => {
+        setTabsCount(data.length);
+
+        if (data.length > 0) {
+          const top = data.reduce((prev, curr) =>
+            (curr.content?.length || 0) > (prev.content?.length || 0)
+              ? curr
+              : prev
+          );
+          setTopTab(top);
+        } else {
+          setTopTab(null);
+        }
+      })
+      .catch(() => {
+        setTabsCount(0);
+        setTopTab(null);
+      });
   }, []);
   const streak = user?.loginRecord || 0;
-  const topTopics = user?.tabs?.tags || [];
 
   return (
     <div className="page-content">
@@ -116,13 +132,22 @@ export default function Profile() {
             </p>
             <p>
               <FontAwesomeIcon icon={faThumbtack} style={{ marginRight: 5 }} />
-              Most Used Topics:
+              Most Used Tab:
             </p>
-            <ul>
-              {topTopics.map((topic, index) => (
-                <li key={index}>#{topic}</li>
-              ))}
-            </ul>
+            {topTab ? (
+              <p
+                style={{
+                  fontWeight: "bold",
+                  color: "var(--color-accent)",
+                  fontSize: "1.5rem",
+                  textShadow: "0 0 5px var(--color-accent)",
+                }}
+              >
+                {topTab.title}
+              </p>
+            ) : (
+              <p>No tabs used or created yet</p>
+            )}
           </div>
           <div
             style={{
