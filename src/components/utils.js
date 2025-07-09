@@ -47,6 +47,9 @@ function getHandleCoordsByPosition(node, handlePosition) {
         case Position.Bottom:
             offsetY = handle.height;
             break;
+        default:
+            console.warn(`Unknown handle position: ${handlePosition}`);
+            break;
     }
 
     const x = node.internals.positionAbsolute.x + handle.x + offsetX;

@@ -6,13 +6,12 @@
   background: var(--color-gradient);
   min-height: 300px;
   max-width: 300px;
-  padding: 1rem;
-  gap: 1rem;
+  padding: 2rem;
 }
 
 .react-flow__node p {
   color: var(--color-muted);
-  margin: 0;
+  margin-top: 0.5rem;
 }
 
 .react-flow__node a {
