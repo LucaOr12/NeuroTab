@@ -4,6 +4,7 @@ import {
   ReactFlowProvider,
   Background,
   applyNodeChanges,
+  addEdge,
 } from "@xyflow/react";
 import CustomNode from "./CustomNode";
 import SimpleFloatingEdge from "./SimpleFloatingEdge";
@@ -20,12 +21,28 @@ export default function TabFlow({ contents }) {
     floating: SimpleFloatingEdge,
   };
 
-  const onConnect = useCallback(
-    (params) => {
-      setEdges((eds) => [...eds, { ...params, type: "floating" }]);
-    },
-    [setEdges]
-  );
+  const onConnect = useCallback((params) => {
+    const newEdge = {
+      ...params,
+      id: `${params.source}-${params.target}`,
+      type: "floating",
+    };
+
+    setEdges((eds) => addEdge(newEdge, eds));
+
+    fetch("https://neurotab-api.onrender.com/api/Connections", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        FromContentId: params.source,
+        ToContentId: params.target,
+        ConnectionType: "leads_to",
+        Strength: 1,
+        IsAiGenerated: false,
+      }),
+    });
+  }, []);
 
   useEffect(() => {
     const generatedNodes = contents.map((item, index) => ({
@@ -36,7 +53,32 @@ export default function TabFlow({ contents }) {
       },
       type: "custom",
     }));
+
     setNodes(generatedNodes);
+
+    fetch("https://neurotab-api.onrender.com/api/Connections", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const formattedEdges = data.map((conn) => ({
+          id: `${conn.fromContentId}-${conn.toContentId}`,
+          source: conn.fromContentId,
+          target: conn.toContentId,
+          type: "floating",
+          data: {
+            connectionType: conn.connectionType,
+            strength: conn.strength,
+            notes: conn.notes,
+            isAiGenerated: conn.isAiGenerated,
+          },
+        }));
+
+        setEdges(formattedEdges);
+      })
+      .catch((err) => {
+        console.error("Errore nel recupero delle connessioni:", err);
+      });
   }, [contents]);
 
   const onNodesChange = useCallback((changes) => {
