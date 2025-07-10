@@ -30,7 +30,7 @@ export default function TabFlow({ contents }) {
   useEffect(() => {
     const generatedNodes = contents.map((item, index) => ({
       id: item.id,
-      position: { x: 100 + index * 200, y: 100 },
+      position: { x: item.positionX, y: item.positionY },
       data: {
         ...item,
       },
@@ -39,10 +39,28 @@ export default function TabFlow({ contents }) {
     setNodes(generatedNodes);
   }, [contents]);
 
-  const onNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    []
-  );
+  const onNodesChange = useCallback((changes) => {
+    setNodes((nds) => applyNodeChanges(changes, nds));
+  }, []);
+
+  const onNodeDragStop = useCallback((event, node) => {
+    console.log("Drag stopped:", node.id, node.position);
+
+    fetch(
+      `https://neurotab-api.onrender.com/api/Contents/${node.id}/position`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          x: node.position.x,
+          y: node.position.y,
+        }),
+        credentials: "include",
+      }
+    );
+  }, []);
 
   return (
     <div
@@ -58,6 +76,7 @@ export default function TabFlow({ contents }) {
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
+          onNodeDragStop={onNodeDragStop}
           fitView
           onConnect={onConnect}
           nodeTypes={nodeTypes}

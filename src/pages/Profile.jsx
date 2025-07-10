@@ -49,7 +49,7 @@ export default function Profile() {
   const handleLogout = async () => {
     await fetch("https://neurotab-api.onrender.com/api/Users/logout", {
       method: "POST",
-      credentials: "include", // Important: send cookies
+      credentials: "include",
     });
     setUser(null);
     setShowStepper(true);
