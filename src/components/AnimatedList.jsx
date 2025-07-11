@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
+import UpdateTabDialog from "./UpdateTabDialog";
 import "./AnimatedList.scss";
 
 const AnimatedItem = ({
@@ -145,7 +146,13 @@ const AnimatedList = ({
                 selectedIndex === index ? "selected" : ""
               } ${itemClassName}`}
             >
-              <p className="item-text">{item}</p>
+              <p className="item-text">{item.title}</p>
+              <UpdateTabDialog
+                tab={item}
+                onUpdate={(updatedTab) => {
+                  console.log("Updated Tab:", updatedTab);
+                }}
+              />
             </div>
           </AnimatedItem>
         ))}

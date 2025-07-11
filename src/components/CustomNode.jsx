@@ -1,5 +1,5 @@
 import { Handle, Position } from "@xyflow/react";
-import "./CustomNode.scss"; // opzionale per lo stile
+import "./CustomNode.scss";
 
 export default function CustomNode({ data }) {
   return (

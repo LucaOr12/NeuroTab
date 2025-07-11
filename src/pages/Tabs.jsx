@@ -108,9 +108,9 @@ export default function Tabs() {
           </div>
         ) : (
           <AnimatedList
-            items={filteredTabs.map((tab) => tab.title)}
-            onItemSelect={(title, index) => {
-              setSelectedTab(filteredTabs[index]);
+            items={filteredTabs}
+            onItemSelect={(tab) => {
+              setSelectedTab(tab);
             }}
             showGradients={false}
             enableArrowNavigation={true}
