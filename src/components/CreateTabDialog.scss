@@ -1,0 +1,121 @@
+@import "src/style.scss";
+
+.DialogOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+}
+
+.DialogContent {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+  color: var(--color-text);
+  font-family: var(--font-family);
+}
+
+.DialogTitle {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.DialogDescription {
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-muted);
+  font-size: 1rem;
+}
+
+.Fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  border: none;
+}
+
+.Label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.Input {
+  padding: 0.6rem 0.75rem;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+
+  &:focus {
+    border-color: var(--color-primary);
+    outline: none;
+  }
+}
+
+.Button {
+  padding: 0.5rem 1rem;
+  border: none;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.Button.violet {
+  margin-left: 1.6rem;
+  padding: 0.5rem 1rem;
+  gap: 0.5rem;
+  border-radius: 1rem;
+  border: none;
+  background: var(--glass-bg);
+  color: var(--color-text);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--color-primary);
+    box-shadow: 0 4px 30px var(--color-accent);
+  }
+}
+
+.Button.green {
+  margin-right: 1rem;
+  background: var(--color-gradient);
+  color: white;
+
+  &:hover {
+    box-shadow: 0 4px 30px var(--color-accent);
+  }
+}
+
+.IconButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-muted);
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--color-text);
+  }
+}

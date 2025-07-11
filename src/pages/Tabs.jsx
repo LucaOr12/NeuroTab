@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import AnimatedList from "../components/AnimatedList";
 import TabFlow from "../components/TabFlow";
+import CreateTabDialog from "../components/CreateTabDialog";
+import CreateContentDialog from "../components/CreateContentDialog";
 import "./Tabs.scss";
 
 export default function Tabs() {
@@ -22,12 +24,12 @@ export default function Tabs() {
       });
   }, []);
 
-  const handleCreateTab = async () => {
+  const handleCreateTab = async ({ title, description }) => {
     const newTab = {
-      title: "Untitled Tab",
+      title: title || "Untitled Tab",
       content: [],
       url: null,
-      description: "",
+      description: description || "",
       tags: [],
     };
 
@@ -98,9 +100,7 @@ export default function Tabs() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button onClick={handleCreateTab} className="create-tab-button">
-          +
-        </button>
+        <CreateTabDialog onCreate={handleCreateTab} />
 
         {filteredTabs.length === 0 ? (
           <div className="no-tabs">
@@ -128,12 +128,9 @@ export default function Tabs() {
             <div className="tab-actions">
               <h2>{selectedTab.title}</h2>
               <p>{selectedTab.description}</p>
-              <button
-                className="create-content-button"
-                onClick={() => handleCreateContent(selectedTab.id)}
-              >
-                Create Thought +
-              </button>
+              <CreateContentDialog
+                onCreate={() => handleCreateContent(selectedTab.id)}
+              />
             </div>
             <TabFlow contents={selectedTab.content || []} />
           </>
