@@ -55,7 +55,7 @@ export default function Tabs() {
     (tab) => tab.id === selectedTab?.id
   );
 
-  const handleCreateContent = async (tabId) => {
+  const handleCreateContent = async ({ tabId, title, description, url }) => {
     console.log("Creating content for tabId:", tabId);
     const response = await fetch(
       `https://neurotab-api.onrender.com/api/Contents`,
@@ -67,9 +67,9 @@ export default function Tabs() {
         },
         body: JSON.stringify({
           tabId: tabId,
-          title: "New Content Item",
-          description: "",
-          url: null,
+          title: title || "New Content Item",
+          description: description || "",
+          url: url || null,
         }),
       }
     );
@@ -129,7 +129,14 @@ export default function Tabs() {
               <h2>{selectedTab.title}</h2>
               <p>{selectedTab.description}</p>
               <CreateContentDialog
-                onCreate={() => handleCreateContent(selectedTab.id)}
+                onCreate={({ title, description, url }) =>
+                  handleCreateContent({
+                    tabId: selectedTab.id,
+                    title,
+                    description,
+                    url,
+                  })
+                }
               />
             </div>
             <TabFlow contents={selectedTab.content || []} />
