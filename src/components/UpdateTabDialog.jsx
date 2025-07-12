@@ -38,6 +38,33 @@ export default function UpdateTabDialog({ tab, onUpdate }) {
     }
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this tab?")) return;
+
+    try {
+      const response = await fetch(
+        `https://neurotab-api.onrender.com/api/Tabs/${tab.id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        console.error("Delete failed:", error);
+        alert("Failed to delete tab");
+        return;
+      }
+
+      console.log("Deleted Tab:", tab.id);
+      if (onUpdate) onUpdate(null);
+    } catch (err) {
+      console.error("Network error:", err);
+      alert("Network error while deleting tab.");
+    }
+  };
+
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
@@ -94,6 +121,11 @@ export default function UpdateTabDialog({ tab, onUpdate }) {
               justifyContent: "flex-end",
             }}
           >
+            <Dialog.Close asChild>
+              <button className="Button red" onClick={handleDelete}>
+                Delete
+              </button>
+            </Dialog.Close>
             <Dialog.Close asChild>
               <button className="Button green" onClick={handleSave}>
                 Save

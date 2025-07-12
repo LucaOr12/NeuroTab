@@ -96,10 +96,20 @@
 .Button.green {
   margin-right: 1rem;
   background: var(--color-gradient);
-  color: white;
+  color: var(--color-text);
 
   &:hover {
     box-shadow: 0 4px 30px var(--color-accent);
+  }
+}
+.Button.red {
+  margin-right: 1rem;
+  background: var(--glass-bg);
+  color: var(--color-text);
+
+  &:hover {
+    background: red;
+    box-shadow: 0 4px 30px red;
   }
 }
 
