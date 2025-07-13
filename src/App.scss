@@ -161,3 +161,25 @@
     line-height: 1.6;
   }
 }
+
+.button-edge__label {
+  position: absolute;
+  pointer-events: all;
+  transform-origin: center;
+}
+.button-edge__button {
+  width: 30px;
+  height: 30px;
+  border: 5px solid var(--color-text);
+  color: var(--color-text);
+  background-color: var(--glass-bg);
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 12px;
+  padding-top: 0px;
+}
+.button-edge__button:hover {
+  border: 5px solid var(--color-primary);
+  background-color: var(--xy-theme-hover);
+  color: var(--color-primary);
+}

@@ -62,7 +62,7 @@ export default function TabFlow({ contents }) {
       .then((res) => res.json())
       .then((data) => {
         const formattedEdges = data.map((conn) => ({
-          id: `${conn.fromContentId}-${conn.toContentId}`,
+          id: conn.id,
           source: conn.fromContentId,
           target: conn.toContentId,
           type: "floating",
