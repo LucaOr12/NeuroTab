@@ -5,6 +5,7 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import { getEdgeParams } from "./utils";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function SimpleFloatingEdge({
   id,
@@ -16,6 +17,7 @@ export default function SimpleFloatingEdge({
   const sourceNode = useInternalNode(source);
   const targetNode = useInternalNode(target);
   const { setEdges } = useReactFlow();
+  const queryClient = useQueryClient();
 
   if (!sourceNode || !targetNode) {
     return null;
@@ -29,8 +31,6 @@ export default function SimpleFloatingEdge({
   const onEdgeClick = async () => {
     setEdges((edges) => edges.filter((edge) => edge.id !== id));
 
-    if (!id.includes("-")) return;
-
     try {
       const response = await fetch(
         `https://neurotab-api.onrender.com/api/Connections/${id}`,
@@ -41,10 +41,12 @@ export default function SimpleFloatingEdge({
       );
 
       if (!response.ok) {
-        console.error("Error deleting:", await response.text());
+        console.error("Errore DELETE:", await response.text());
+      } else {
+        queryClient.invalidateQueries({ queryKey: ["connections"] });
       }
     } catch (err) {
-      console.error("Error netork in DELETE:", err);
+      console.error("Network ERROR for Delete:", err);
     }
   };
 
