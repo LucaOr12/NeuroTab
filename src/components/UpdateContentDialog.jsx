@@ -1,49 +1,50 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import React, { useState } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import "./UpdateTabDialog.scss";
+import { useState } from "react";
+import "./UpdateContentDialog.scss";
 
-export default function UpdateTabDialog({ tab, onUpdate }) {
-  const [title, setTitle] = useState(tab.title);
-  const [description, setDescription] = useState(tab.description);
+export default function UpdateContentDialog({ content, onUpdate }) {
+  const [title, setTitle] = useState(content.title);
+  const [description, setDescription] = useState(content.description);
+  const [url, setUrl] = useState(content.url || "");
 
   const handleSave = async () => {
     try {
       const response = await fetch(
-        `${window.API_BASE_URL}/api/Tabs/update/${tab.id}`,
+        `${window.API_BASE_URL}/api/Contents/update/${content.id}`,
         {
           method: "PATCH",
-          headers: {
+          heders: {
             "Content-Type": "application/json",
           },
           credentials: "include",
-          body: JSON.stringify({ ...tab, title, description }),
+          body: JSON.stringify({ ...content, title, description, url }),
         }
       );
 
       if (!response.ok) {
         const error = await response.json();
         console.error("Update failed:", error);
-        alert("Failed to update tab");
+        alert("Failed to update content");
         return;
       }
 
       const updated = await response.json();
-      console.log("Updated Tab:", updated);
+      console.log("Updated content: ", updated);
 
       if (onUpdate) onUpdate(updated);
     } catch (err) {
-      console.error("Network error:", err);
-      alert("Network error while updating tab.");
+      console.error("Network error: ", err);
+      alert("Network error while updating content.");
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this tab?")) return;
-
+    if (!window.confirm("Are you sure you want to delete this content?"))
+      return;
     try {
       const response = await fetch(
-        `${window.API_BASE_URL}/api/Tabs/${tab.id}`,
+        `${window.API_BASE_URL}/api/Contents/${content.id}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -57,11 +58,11 @@ export default function UpdateTabDialog({ tab, onUpdate }) {
         return;
       }
 
-      console.log("Deleted Tab:", tab.id);
+      console.log("Deleted Tab:", content.id);
       if (onUpdate) onUpdate(null);
     } catch (err) {
       console.error("Network error:", err);
-      alert("Network error while deleting tab.");
+      alert("Network error while deleting content");
     }
   };
 
@@ -88,7 +89,7 @@ export default function UpdateTabDialog({ tab, onUpdate }) {
       <Dialog.Portal>
         <Dialog.Overlay className="DialogOverlay" />
         <Dialog.Content className="DialogContent">
-          <Dialog.Title className="DialogTitle">Update Tab</Dialog.Title>
+          <Dialog.Title className="DialogTitle">Update Content</Dialog.Title>
 
           <fieldset className="Fieldset">
             <label className="Label" htmlFor="title">
@@ -114,6 +115,18 @@ export default function UpdateTabDialog({ tab, onUpdate }) {
             />
           </fieldset>
 
+          <fieldset className="Fieldset">
+            <label className="Label" htmlFor="url">
+              URL (optional)
+            </label>
+            <input
+              className="Input"
+              id="url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+            />
+          </fieldset>
+
           <div
             style={{
               display: "flex",
@@ -131,13 +144,12 @@ export default function UpdateTabDialog({ tab, onUpdate }) {
                 Save
               </button>
             </Dialog.Close>
+            <Dialog.Close asChild>
+              <button className="IconButton" aria-label="Close">
+                <Cross2Icon />
+              </button>
+            </Dialog.Close>
           </div>
-
-          <Dialog.Close asChild>
-            <button className="IconButton" aria-label="Close">
-              <Cross2Icon />
-            </button>
-          </Dialog.Close>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

@@ -1,4 +1,5 @@
 import { Handle, Position } from "@xyflow/react";
+import UpdateContentDialog from "./UpdateContentDialog";
 import "./CustomNode.scss";
 
 export default function CustomNode({ data }) {
@@ -11,6 +12,14 @@ export default function CustomNode({ data }) {
           {data.url}
         </a>
       )}
+      <div className="update-button">
+        <UpdateContentDialog
+          content={data}
+          onUpdate={(updateContent) => {
+            console.log("Updated Content:", updateContent);
+          }}
+        />
+      </div>
 
       {/* Source handles */}
       <Handle type="source" position={Position.Top} />
