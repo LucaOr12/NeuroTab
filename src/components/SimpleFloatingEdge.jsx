@@ -33,7 +33,7 @@ export default function SimpleFloatingEdge({
 
     try {
       const response = await fetch(
-        `https://neurotab-api.onrender.com/api/Connections/${id}`,
+        `${window.API_BASE_URL}/api/Connections/${id}`,
         {
           method: "DELETE",
           credentials: "include",

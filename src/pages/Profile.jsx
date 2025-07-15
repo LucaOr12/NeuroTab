@@ -14,7 +14,7 @@ export default function Profile() {
   const [topTab, setTopTab] = useState(null);
 
   useEffect(() => {
-    fetch("https://neurotab-api.onrender.com/api/Users/logged-user", {
+    fetch(`${window.API_BASE_URL}/api/Users/logged-user`, {
       method: "GET",
       credentials: "include",
     })
@@ -28,7 +28,7 @@ export default function Profile() {
   }, []);
 
   const handleLoginSuccess = (credentialResponse) => {
-    fetch("https://neurotab-api.onrender.com/api/Users/google-login", {
+    fetch(`${window.API_BASE_URL}/api/Users/google-login`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -47,7 +47,7 @@ export default function Profile() {
   };
 
   const handleLogout = async () => {
-    await fetch("https://neurotab-api.onrender.com/api/Users/logout", {
+    await fetch(`${window.API_BASE_URL}/api/Users/logout`, {
       method: "POST",
       credentials: "include",
     });
@@ -55,7 +55,7 @@ export default function Profile() {
     setShowStepper(true);
   };
   useEffect(() => {
-    fetch("https://neurotab-api.onrender.com/api/Tabs/all", {
+    fetch(`${window.API_BASE_URL}/api/Tabs/all`, {
       credentials: "include",
     })
       .then((res) => (res.ok ? res.json() : []))

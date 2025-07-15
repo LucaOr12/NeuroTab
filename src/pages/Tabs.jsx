@@ -14,7 +14,7 @@ export default function Tabs() {
   );
 
   useEffect(() => {
-    fetch("https://neurotab-api.onrender.com/api/Tabs/all", {
+    fetch(`${window.API_BASE_URL}/api/Tabs/all`, {
       credentials: "include",
     })
       .then((res) => (res.ok ? res.json() : []))
@@ -33,7 +33,7 @@ export default function Tabs() {
       tags: [],
     };
 
-    const response = await fetch("https://neurotab-api.onrender.com/api/Tabs", {
+    const response = await fetch(`${window.API_BASE_URL}/api/Tabs`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -57,22 +57,19 @@ export default function Tabs() {
 
   const handleCreateContent = async ({ tabId, title, description, url }) => {
     console.log("Creating content for tabId:", tabId);
-    const response = await fetch(
-      `https://neurotab-api.onrender.com/api/Contents`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          tabId: tabId,
-          title: title || "New Content Item",
-          description: description || "",
-          url: url || null,
-        }),
-      }
-    );
+    const response = await fetch(`${window.API_BASE_URL}/api/Contents`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tabId: tabId,
+        title: title || "New Content Item",
+        description: description || "",
+        url: url || null,
+      }),
+    });
     if (response.ok) {
       const newContent = await response.json();
       console.log("Created Content:", newContent);

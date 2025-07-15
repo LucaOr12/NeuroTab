@@ -13,7 +13,7 @@ import SimpleFloatingEdge from "./SimpleFloatingEdge";
 import "@xyflow/react/dist/style.css";
 
 const fetchConnections = async () => {
-  const res = await fetch("https://neurotab-api.onrender.com/api/Connections", {
+  const res = await fetch(`${window.API_BASE_URL}/api/Connections`, {
     credentials: "include",
   });
   if (!res.ok) throw new Error("Error fetching connections");
@@ -82,7 +82,7 @@ export default function TabFlow({ contents }) {
 
       setEdges((eds) => addEdge(newEdge, eds));
 
-      fetch("https://neurotab-api.onrender.com/api/Connections", {
+      fetch(`${window.API_BASE_URL}/api/Connections`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -105,18 +105,15 @@ export default function TabFlow({ contents }) {
   }, []);
 
   const onNodeDragStop = useCallback((event, node) => {
-    fetch(
-      `https://neurotab-api.onrender.com/api/Contents/${node.id}/position`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          x: node.position.x,
-          y: node.position.y,
-        }),
-      }
-    );
+    fetch(`${window.API_BASE_URL}/api/Contents/${node.id}/position`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        x: node.position.x,
+        y: node.position.y,
+      }),
+    });
   }, []);
 
   if (isLoading) return <div>Loading Connections...</div>;
