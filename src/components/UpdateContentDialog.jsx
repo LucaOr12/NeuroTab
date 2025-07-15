@@ -14,11 +14,11 @@ export default function UpdateContentDialog({ content, onUpdate }) {
         `${window.API_BASE_URL}/api/Contents/update/${content.id}`,
         {
           method: "PATCH",
-          heders: {
+          headers: {
             "Content-Type": "application/json",
           },
           credentials: "include",
-          body: JSON.stringify({ ...content, title, description, url }),
+          body: JSON.stringify({ title, description, url }),
         }
       );
 
