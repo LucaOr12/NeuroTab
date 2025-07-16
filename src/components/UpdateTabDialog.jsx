@@ -1,69 +1,55 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import React, { useState } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import "./UpdateTabDialog.scss";
 
 export default function UpdateTabDialog({ tab, onUpdate }) {
   const [title, setTitle] = useState(tab.title);
   const [description, setDescription] = useState(tab.description);
+  const queryClient = useQueryClient();
 
-  const handleSave = async () => {
-    try {
-      const response = await fetch(
+  const updateMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(
         `${window.API_BASE_URL}/api/Tabs/update/${tab.id}`,
         {
           method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({ ...tab, title, description }),
         }
       );
+      if (!res.ok) throw new Error("Failed to update tab");
+      return res.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["tabs"] });
+      if (onUpdate) onUpdate(data);
+    },
+    onError: (err) => {
+      console.error("Update failed:", err);
+      alert("Failed to update tab");
+    },
+  });
 
-      if (!response.ok) {
-        const error = await response.json();
-        console.error("Update failed:", error);
-        alert("Failed to update tab");
-        return;
-      }
-
-      const updated = await response.json();
-      console.log("Updated Tab:", updated);
-
-      if (onUpdate) onUpdate(updated);
-    } catch (err) {
-      console.error("Network error:", err);
-      alert("Network error while updating tab.");
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this tab?")) return;
-
-    try {
-      const response = await fetch(
-        `${window.API_BASE_URL}/api/Tabs/${tab.id}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
-
-      if (!response.ok) {
-        const error = await response.json();
-        console.error("Delete failed:", error);
-        alert("Failed to delete tab");
-        return;
-      }
-
-      console.log("Deleted Tab:", tab.id);
+  const deleteMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`${window.API_BASE_URL}/api/Tabs/${tab.id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Failed to delete tab");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tabs"] });
       if (onUpdate) onUpdate(null);
-    } catch (err) {
-      console.error("Network error:", err);
-      alert("Network error while deleting tab.");
-    }
-  };
+    },
+    onError: (err) => {
+      console.error("Delete failed:", err);
+      alert("Failed to delete tab");
+    },
+  });
 
   return (
     <Dialog.Root>
@@ -122,12 +108,18 @@ export default function UpdateTabDialog({ tab, onUpdate }) {
             }}
           >
             <Dialog.Close asChild>
-              <button className="Button red" onClick={handleDelete}>
+              <button
+                className="Button red"
+                onClick={() => deleteMutation.mutate()}
+              >
                 Delete
               </button>
             </Dialog.Close>
             <Dialog.Close asChild>
-              <button className="Button green" onClick={handleSave}>
+              <button
+                className="Button green"
+                onClick={() => updateMutation.mutate()}
+              >
                 Save
               </button>
             </Dialog.Close>

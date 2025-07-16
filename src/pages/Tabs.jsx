@@ -3,26 +3,32 @@ import AnimatedList from "../components/AnimatedList";
 import TabFlow from "../components/TabFlow";
 import CreateTabDialog from "../components/CreateTabDialog";
 import CreateContentDialog from "../components/CreateContentDialog";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import "./Tabs.scss";
 
+const fetchTabs = async () => {
+  const res = await fetch(`${window.API_BASE_URL}/api/Tabs/all`, {
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Error fetching Tabs");
+  return res.json();
+};
+
 export default function Tabs() {
-  const [tabs, setTabs] = useState([]);
   const [selectedTab, setSelectedTab] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const filteredTabs = tabs.filter((tab) =>
+  const queryClient = useQueryClient();
+  const {
+    data: tabData,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["tabs"],
+    queryFn: fetchTabs,
+  });
+  const filteredTabs = (tabData || []).filter((tab) =>
     tab.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  useEffect(() => {
-    fetch(`${window.API_BASE_URL}/api/Tabs/all`, {
-      credentials: "include",
-    })
-      .then((res) => (res.ok ? res.json() : []))
-      .then((data) => {
-        setTabs(data);
-        if (data.length > 0) setSelectedTab(data[0]);
-      });
-  }, []);
 
   const handleCreateTab = async ({ title, description }) => {
     const newTab = {
@@ -43,13 +49,16 @@ export default function Tabs() {
     });
 
     if (response.ok) {
-      const createdTab = await response.json();
-      setTabs([...tabs, createdTab]);
-      setSelectedTab(createdTab);
+      await queryClient.invalidateQueries({ queryKey: ["tabs"] });
     } else {
       alert("Failed to create tab");
     }
   };
+  useEffect(() => {
+    if (tabData && tabData.length > 0 && !selectedTab) {
+      setSelectedTab(tabData[0]);
+    }
+  }, [tabData, selectedTab]);
 
   const selectedIndex = filteredTabs.findIndex(
     (tab) => tab.id === selectedTab?.id
@@ -106,9 +115,7 @@ export default function Tabs() {
         ) : (
           <AnimatedList
             items={filteredTabs}
-            onItemSelect={(tab) => {
-              setSelectedTab(tab);
-            }}
+            onItemSelect={(tab) => setSelectedTab(tab)}
             showGradients={false}
             enableArrowNavigation={true}
             displayScrollbar={false}
