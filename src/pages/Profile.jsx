@@ -6,12 +6,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFireFlameCurved } from "@fortawesome/free-solid-svg-icons";
 import { faThumbtack } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [showStepper, setShowStepper] = useState(true);
   const [tabsCount, setTabsCount] = useState(0);
   const [topTab, setTopTab] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetch(`${window.API_BASE_URL}/api/Users/logged-user`, {
@@ -28,6 +30,7 @@ export default function Profile() {
   }, []);
 
   const handleLoginSuccess = (credentialResponse) => {
+    setIsLoading(true);
     fetch(`${window.API_BASE_URL}/api/Users/google-login`, {
       method: "POST",
       credentials: "include",
@@ -43,7 +46,8 @@ export default function Profile() {
         setUser(profile);
         setShowStepper(false);
       })
-      .catch(() => alert("Error fetching user profile"));
+      .catch(() => alert("Error fetching user profile"))
+      .finally(() => setIsLoading(false));
   };
 
   const handleLogout = async () => {
@@ -100,6 +104,7 @@ export default function Profile() {
               onSuccess={handleLoginSuccess}
               onError={() => alert("Login failed")}
             />
+            <div>{isLoading ? <LoadingSpinner /> : <div></div>}</div>
           </Step>
           <Step>
             <h2>Done!</h2>
