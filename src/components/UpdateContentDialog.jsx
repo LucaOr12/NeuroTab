@@ -1,15 +1,17 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import "./UpdateContentDialog.scss";
 
 export default function UpdateContentDialog({ content, onUpdate }) {
   const [title, setTitle] = useState(content.title);
   const [description, setDescription] = useState(content.description);
   const [url, setUrl] = useState(content.url || "");
+  const queryClient = useQueryClient();
 
-  const handleSave = async () => {
-    try {
+  const updateMutation = useMutation({
+    mutationFn: async () => {
       const response = await fetch(
         `${window.API_BASE_URL}/api/Contents/update/${content.id}`,
         {
@@ -21,28 +23,21 @@ export default function UpdateContentDialog({ content, onUpdate }) {
           body: JSON.stringify({ title, description, url }),
         }
       );
+      if (!response.ok) throw new Error("Failed to update Content");
+      return response.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["contents"] });
+      if (onUpdate) onUpdate(data);
+    },
+    onError: (err) => {
+      console.error("Update failed:", err);
+      alert("Failed to update content");
+    },
+  });
 
-      if (!response.ok) {
-        const error = await response.json();
-        console.error("Update failed:", error);
-        alert("Failed to update content");
-        return;
-      }
-
-      const updated = await response.json();
-      console.log("Updated content: ", updated);
-
-      if (onUpdate) onUpdate(updated);
-    } catch (err) {
-      console.error("Network error: ", err);
-      alert("Network error while updating content.");
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this content?"))
-      return;
-    try {
+  const deleteMutation = useMutation({
+    mutationFn: async () => {
       const response = await fetch(
         `${window.API_BASE_URL}/api/Contents/${content.id}`,
         {
@@ -50,21 +45,17 @@ export default function UpdateContentDialog({ content, onUpdate }) {
           credentials: "include",
         }
       );
-
-      if (!response.ok) {
-        const error = await response.json();
-        console.error("Delete failed:", error);
-        alert("Failed to delete tab");
-        return;
-      }
-
-      console.log("Deleted Tab:", content.id);
+      if (!response.ok) throw new Error("Failed to delete content");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contents"] });
       if (onUpdate) onUpdate(null);
-    } catch (err) {
-      console.error("Network error:", err);
-      alert("Network error while deleting content");
-    }
-  };
+    },
+    onError: (err) => {
+      console.error("Delete failed:", err);
+      alert("Failed to delete content");
+    },
+  });
 
   return (
     <Dialog.Root>
@@ -135,12 +126,18 @@ export default function UpdateContentDialog({ content, onUpdate }) {
             }}
           >
             <Dialog.Close asChild>
-              <button className="Button red" onClick={handleDelete}>
+              <button
+                className="Button red"
+                onClick={() => deleteMutation.mutate()}
+              >
                 Delete
               </button>
             </Dialog.Close>
             <Dialog.Close asChild>
-              <button className="Button green" onClick={handleSave}>
+              <button
+                className="Button green"
+                onClick={() => updateMutation.mutate()}
+              >
                 Save
               </button>
             </Dialog.Close>

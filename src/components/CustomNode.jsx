@@ -1,8 +1,28 @@
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, useReactFlow } from "@xyflow/react";
 import UpdateContentDialog from "./UpdateContentDialog";
 import "./CustomNode.scss";
 
-export default function CustomNode({ data }) {
+export default function CustomNode({ id, data }) {
+  const { setNodes } = useReactFlow();
+
+  const handleUpdate = (updatedContent) => {
+    if (!updatedContent) return;
+
+    setNodes((prevNodes) =>
+      prevNodes.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                ...updatedContent,
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
     <div className="custom-node">
       <strong>{data.title}</strong>
@@ -13,12 +33,7 @@ export default function CustomNode({ data }) {
         </a>
       )}
       <div className="update-button">
-        <UpdateContentDialog
-          content={data}
-          onUpdate={(updateContent) => {
-            console.log("Updated Content:", updateContent);
-          }}
-        />
+        <UpdateContentDialog content={data} onUpdate={handleUpdate} />
       </div>
 
       {/* Source handles */}
